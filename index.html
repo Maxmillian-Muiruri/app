@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Wallet Checker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Select a blockchain</h1>
+            <p>Here you can turn on/off blockchains for search</p>
+        </div>
+        <div class="coins-container">
+            <div class="scroll-arrow left" onclick="scrollCoins(-100)">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            <div class="coins" id="coins-scroll">
+                <div class="blockchain-card selected btc">
+                    <div class="icon-bg"><i class="fab fa-btc"></i></div>
+                    <span class="blockchain-name">BTC</span>
+                </div>
+                <div class="blockchain-card selected eth">
+                    <div class="icon-bg"><i class="fab fa-ethereum"></i></div>
+                    <span class="blockchain-name">ETH</span>
+                </div>
+                <div class="blockchain-card selected bnb">
+                    <div class="icon-bg"><i class="fab fa-btc"></i></div>
+                    <span class="blockchain-name">BNB</span>
+                </div>
+                <div class="blockchain-card selected sol">
+                    <div class="icon-bg"><img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png" width="35" height="35"></div>
+                    <span class="blockchain-name">SOL</span>
+                </div>
+                <div class="blockchain-card selected trx">
+                    <div class="icon-bg"><i class="fas fa-t"></i></div>
+                    <span class="blockchain-name">TRX</span>
+                </div>
+                <div class="blockchain-card selected xrp">
+                    <div class="icon-bg"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStEx8l1lrrq1h7ap3moMYOl-dmeNzfi3HTOw&s" alt="" width="35" height="35"></div>
+                    <span class="blockchain-name">XRP</span>
+                </div>
+                <div class="blockchain-card selected doge">
+                    <div class="icon-bg"><i class="fab fa-reddit-alien"></i></div>
+                    <span class="blockchain-name">DOGE</span>
+                </div>
+                <div class="blockchain-card selected sql">
+                    <div class="icon-bg"><i class="fas fa-database"></i></div>
+                    <span class="blockchain-name">SQL</span>
+                </div>
+                <div class="blockchain-card selected doce">
+                    <div class="icon-bg"><i class="fas fa-coins"></i></div>
+                    <span class="blockchain-name">DOCE</span>
+                </div>
+                
+                <!-- Additional popular coins -->
+                <div class="blockchain-card selected usdt">
+                    <div class="icon-bg"><i class="fas fa-dollar-sign"></i></div>
+                    <span class="blockchain-name">USDT</span>
+                </div>
+                <div class="blockchain-card selected ada">
+                    <div class="icon-bg"><i class="fab fa-ada"></i></div>
+                    <span class="blockchain-name">ADA</span>
+                </div>
+                <div class="blockchain-card selected dot">
+                    <div class="icon-bg"><i class="fas fa-circle-dot"></i></div>
+                    <span class="blockchain-name">DOT</span>
+                </div>
+                <div class="blockchain-card selected matic">
+                    <div class="icon-bg"><i class="fas fa-bahai"></i></div>
+                    <span class="blockchain-name">MATIC</span>
+                </div>
+                <div class="blockchain-card selected ltc">
+                    <div class="icon-bg"><i class="fab fa-litecoin"></i></div>
+                    <span class="blockchain-name">LTC</span>
+                </div>
+                <div class="blockchain-card selected shib">
+                    <div class="icon-bg"><i class="fas fa-dog"></i></div>
+                    <span class="blockchain-name">SHIB</span>
+                </div>
+                <div class="blockchain-card selected avax">
+                    <div class="icon-bg"><i class="fas fa-snowflake"></i></div>
+                    <span class="blockchain-name">AVAX</span>
+                </div>
+                <div class="blockchain-card selected xlm">
+                    <div class="icon-bg"><i class="fas fa-star"></i></div>
+                    <span class="blockchain-name">XLM</span>
+                </div>
+                <div class="blockchain-card selected atom">
+                    <div class="icon-bg"><i class="fas fa-atom"></i></div>
+                    <span class="blockchain-name">ATOM</span>
+                </div>
+                <div class="blockchain-card selected link">
+                    <div class="icon-bg"><i class="fas fa-link"></i></div>
+                    <span class="blockchain-name">LINK</span>
+                </div>
+            </div>
+            <div class="scroll-arrow right" onclick="scrollCoins(100)">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="status-panel">
+                <div class="checked">Checked: <span id="checked-count">37829</span></div>
+                <div class="wallet-list">
+                    <div class="wallet-item">Balance: 0 |  Wallet check: <span class="wallet-name">bailelu@licto...</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">gi@jewr@gula...</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">th@sleek@idna...</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">centuryi@nota...</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">animaly.compan...</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">meanpran@rym...</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">text curious -</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">luxuryusbaf@-</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">whatretime@sa-</span></div>
+                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">smartcions-ch-</span></div>
+                </div>
+                <div class="action-buttons">
+                    <button class="stop">Stop</button>
+                    <button class="start">Start</button>
+                </div>
+            </div>
+            <div class="found-panel">
+                <div class="found">Found: <span id="found-count">1</span></div>
+                <div class="found-list" style="background-color:rgb(19,35,65); border-radius: 10px; padding: 10px;">
+                    <div class="found-item">
+                        <div class="icon-bg"><img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png" width="35" height="35"></div>
+                        <span class="sol-balance">4.5977 SOL = $911.83</span> | <span class="usage">usage truc...</span>
+                    </div>
+                </div>
+                <button class="withdraw">Withdraw</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js" defer></script>
+</body>
+</html>

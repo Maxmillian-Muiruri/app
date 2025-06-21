@@ -1,0 +1,291 @@
+
+        body {
+            background: #46385b;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: #23243a;
+            padding: 20px;
+        ;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.3em;
+        }
+
+        .header p {
+            color: #8a8c9e;
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 1.5em;
+        }
+
+        .coins-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .coins {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .coins::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scroll-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: #3a3b5a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .scroll-arrow:hover {
+            opacity: 1;
+        }
+
+        .scroll-arrow.left {
+            left: -15px;
+        }
+
+        .scroll-arrow.right {
+            right: -15px;
+        }
+
+        .blockchain-card {
+            background: #2a2b44;
+            border-radius: 8px;
+            padding: 25px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: 1px solid #3a3b5a;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .blockchain-card.selected {
+            background: #3a3b5a;
+            border-color: #4a4b6a;
+        }
+
+        .icon-bg {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btc .icon-bg { background: #f7931a; }
+        .eth .icon-bg { background: #627eea; }
+        .bnb .icon-bg { background: #f3ba2f; }
+        .sol .icon-bg { background: #00ffa3; }
+        .trx .icon-bg { background: #ef0027; }
+        .xrp .icon-bg { background: #23292f; }
+        .doge .icon-bg { background: #c2a633; }
+        .sql .icon-bg { background: #3a3b5a; }
+        .doce .icon-bg { background: #3a3b5a; }
+        .usdt .icon-bg { background: #26a17b; }
+        .ada .icon-bg { background: #0033ad; }
+        .dot .icon-bg { background: #e6007a; }
+        .matic .icon-bg { background: #8247e5; }
+        .ltc .icon-bg { background: #345d9d; }
+        .shib .icon-bg { background: #f00500; }
+        .avax .icon-bg { background: #e84142; }
+        .xlm .icon-bg { background: #000000; }
+        .atom .icon-bg { background: #2e3148; }
+        .link .icon-bg { background: #2a5ada; }
+
+        .icon-bg i {
+            font-size: 1.6rem;
+        }
+
+        .blockchain-name {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            height: 600px;
+        }
+
+        .status-panel, .found-panel {
+            background: #463e62;
+            border-radius: 8px;
+            padding: 15px;
+            flex: 1;
+        }
+
+        .status-panel {
+            width: 70%;
+        }
+
+        .found-panel {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checked, .found {
+            font-size: 0.9rem;
+            color: #ffefb0;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .wallet-list {
+            height: 83%;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            background-color: rgb(19,35,65);
+            border-radius: 10px;
+        }
+
+        .wallet-item {
+            font-size: 1.4rem;
+            color: #6ee7ff;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 10px;
+            gap: 30px;
+        }
+        ::-webkit-scrollbar{
+            display: none;
+        }
+
+        .wallet-name {
+            color: #8a8c9e;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 20px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            
+        }
+
+        button.stop {
+            background: #ff4d4f;
+            color: white;
+            margin-top: auto;
+        }
+
+        button.start {
+            background: #3ee7ff;
+            color: #23243a;
+            margin-top: auto;
+        }
+
+        .found-list {
+            flex: 1;
+            margin-bottom: 15px;
+
+        }
+
+        .found-item {
+            background: rgba(80,89,112,255);
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 1rem;
+            margin: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sol-balance {
+            color: #3eea7a;
+            font-weight: 500;
+        }
+
+        .usage {
+            color: #8a8c9e;
+        }
+
+        button.withdraw {
+            background: #3e7aff;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            margin-top: auto;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2e314d;
+            border-radius: 5px;
+        }
+
+        @media screen and (max-width: 768px) {
+            body{
+                padding: 10px;
+                height: 100vh;
+            }
+            .container {
+                padding: 10px;
+                height: 100%;
+            }
+            .main-content {
+                flex-direction: column;
+            }
+
+            .status-panel, .found-panel {
+                width: 100%;
+            }
+
+            .status-panel {
+                height: 70%;
+            }
+
+            .found-panel {
+                height: 30%;
+            }
+
+            button{
+                padding: 12px 8px;
+            }
+            
+        }
