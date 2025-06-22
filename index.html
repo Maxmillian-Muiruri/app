@@ -3,21 +3,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blockchain Wallet Checker</title>
+    <title>Multi-Chain Wallet Scanner</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: #46385b;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            background: #23243a;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.3em;
+        }
+
+        .header p {
+            color: #8a8c9e;
+            font-size: 1rem;
+            margin-top: 0;
+            margin-bottom: 1.5em;
+        }
+
+        .coins-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .coins {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .coins::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scroll-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: #3a3b5a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .scroll-arrow:hover {
+            opacity: 1;
+        }
+
+        .scroll-arrow.left {
+            left: -15px;
+        }
+
+        .scroll-arrow.right {
+            right: -15px;
+        }
+
+        .blockchain-card {
+            background: #2a2b44;
+            border-radius: 8px;
+            padding: 25px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: 1px solid #3a3b5a;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .blockchain-card.selected {
+            background: #3a3b5a;
+            border-color: #4a4b6a;
+        }
+
+        .icon-bg {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Coin-specific icon background colors */
+        .btc .icon-bg { background: #f7931a; }
+        .eth .icon-bg { background: #627eea; }
+        .bnb .icon-bg { background: #f3ba2f; }
+        .sol .icon-bg { background: #00ffa3; }
+        .xrp .icon-bg { background: #23292f; }
+        .ada .icon-bg { background: #0033ad; }
+        .doge .icon-bg { background: #c2a633; }
+        .dot .icon-bg { background: #e6007a; }
+        .shib .icon-bg { background: #f00500; }
+        .usdt .icon-bg { background: #26a17b; }
+        .usdc .icon-bg { background: #2775ca; }
+        .busd .icon-bg { background: #f0b90b; }
+        .dai .icon-bg { background: #f5ac37; }
+        .matic .icon-bg { background: #8247e5; }
+        .avax .icon-bg { background: #e84142; }
+        .link .icon-bg { background: #2a5ada; }
+        .atom .icon-bg { background: #2e3148; }
+        .uni .icon-bg { background: #ff007a; }
+        .ltc .icon-bg { background: #345d9d; }
+        .xlm .icon-bg { background: #000000; }
+        .algo .icon-bg { background: #000000; }
+        .vet .icon-bg { background: #15bdff; }
+        .fil .icon-bg { background: #0090ff; }
+        .xtz .icon-bg { background: #2c7df7; }
+        .xmr .icon-bg { background: #ff6600; }
+        .eos .icon-bg { background: #000000; }
+        .aave .icon-bg { background: #b6509e; }
+        .cake .icon-bg { background: #d1884f; }
+        .axs .icon-bg { background: #0055d5; }
+        .sand .icon-bg { background: #05b8c4; }
+        .mana .icon-bg { background: #ff2d55; }
+        .gala .icon-bg { background: #ff4d00; }
+        .chz .icon-bg { background: #cd022d; }
+        .enj .icon-bg { background: #624dbf; }
+        .bat .icon-bg { background: #ff5000; }
+        .grt .icon-bg { background: #6747ed; }
+        .snx .icon-bg { background: #00d1ff; }
+        .comp .icon-bg { background: #00d395; }
+        .yfi .icon-bg { background: #006ae3; }
+        .crv .icon-bg { background: #40649f; }
+        .sushi .icon-bg { background: #d65892; }
+        .one .icon-bg { background: #00aee9; }
+        .neo .icon-bg { background: #00e599; }
+        .qtum .icon-bg { background: #2e9ad0; }
+        .zec .icon-bg { background: #ecb244; }
+        .dash .icon-bg { background: #008ce7; }
+        .waves .icon-bg { background: #0055fe; }
+        .icx .icon-bg { background: #1fc5c9; }
+        .ont .icon-bg { background: #32a4be; }
+        .zil .icon-bg { background: #49c1bf; }
+        .sc .icon-bg { background: #20ee94; }
+        .nano .icon-bg { background: #4a90e2; }
+        .iost .icon-bg { background: #1c1c1c; }
+
+        .icon-bg i {
+            font-size: 1.6rem;
+            color: white;
+        }
+
+        .blockchain-name {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            height: 600px;
+        }
+
+        .status-panel, .found-panel {
+            background: #463e62;
+            border-radius: 8px;
+            padding: 15px;
+            flex: 1;
+        }
+
+        .status-panel {
+            width: 70%;
+        }
+
+        .found-panel {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checked, .found {
+            font-size: 0.9rem;
+            color: #ffefb0;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .wallet-list {
+            height: 83%;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            background-color: rgb(19,35,65);
+            border-radius: 10px;
+        }
+
+        .wallet-item {
+            font-size: 1.4rem;
+            color: #6ee7ff;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 10px;
+        }
+        
+        .found-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            background-color: rgb(19,35,65);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .found-item {
+            background: rgba(80,89,112,255);
+            border-radius: 6px;
+            padding: 15px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sol-balance {
+            color: #3eea7a;
+            font-weight: 500;
+        }
+
+        .usage {
+            color: #8a8c9e;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 12px 0;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        button.start {
+            background: #3ee7ff;
+            color: #23243a;
+            box-shadow: 0 2px 5px rgba(62, 231, 255, 0.3);
+        }
+
+        button.start:hover {
+            background: #2ad7ef;
+            transform: translateY(-1px);
+        }
+
+        button.stop {
+            background: #ff4d4f;
+            color: white;
+            box-shadow: 0 2px 5px rgba(255, 77, 79, 0.3);
+        }
+
+        button.stop:hover {
+            background: #ee3d3f;
+            transform: translateY(-1px);
+        }
+
+        button.withdraw {
+            background: #3e7aff;
+            color: white;
+            margin-top: auto;
+            font-weight: 600;
+        }
+
+        button.withdraw:hover {
+            background: #2d6aef;
+            transform: translateY(-1px);
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Seed Phrase Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .seed-phrase-modal {
+            background-color: #23243a;
+            border-radius: 10px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .seed-phrase {
+            background-color: #2a2b44;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        .modal-ok-btn {
+            background-color: #3e7aff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .modal-ok-btn:hover {
+            background-color: #2d6aef;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+                height: 100vh;
+            }
+            .container {
+                padding: 10px;
+                height: 100%;
+            }
+            .main-content {
+                flex-direction: column;
+            }
+            .status-panel, .found-panel {
+                width: 100%;
+            }
+            button {
+                padding: 12px 8px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Select a blockchain</h1>
-            <p>Here you can turn on/off blockchains for search</p>
+            <h1>Multi-Chain Wallet Scanner</h1>
+            <p>Scanning for major cryptocurrencies and stablecoins</p>
         </div>
         <div class="coins-container">
             <div class="scroll-arrow left" onclick="scrollCoins(-100)">
                 <i class="fas fa-chevron-left"></i>
             </div>
             <div class="coins" id="coins-scroll">
+                <!-- Major Coins -->
                 <div class="blockchain-card selected btc">
                     <div class="icon-bg"><i class="fab fa-btc"></i></div>
                     <span class="blockchain-name">BTC</span>
@@ -31,70 +417,72 @@
                     <span class="blockchain-name">BNB</span>
                 </div>
                 <div class="blockchain-card selected sol">
-                    <div class="icon-bg"><img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png" width="35" height="35"></div>
+                    <div class="icon-bg"><i class="fas fa-bolt"></i></div>
                     <span class="blockchain-name">SOL</span>
                 </div>
-                <div class="blockchain-card selected trx">
-                    <div class="icon-bg"><i class="fas fa-t"></i></div>
-                    <span class="blockchain-name">TRX</span>
-                </div>
                 <div class="blockchain-card selected xrp">
-                    <div class="icon-bg"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStEx8l1lrrq1h7ap3moMYOl-dmeNzfi3HTOw&s" alt="" width="35" height="35"></div>
+                    <div class="icon-bg"><i class="fas fa-x"></i></div>
                     <span class="blockchain-name">XRP</span>
-                </div>
-                <div class="blockchain-card selected doge">
-                    <div class="icon-bg"><i class="fab fa-reddit-alien"></i></div>
-                    <span class="blockchain-name">DOGE</span>
-                </div>
-                <div class="blockchain-card selected sql">
-                    <div class="icon-bg"><i class="fas fa-database"></i></div>
-                    <span class="blockchain-name">SQL</span>
-                </div>
-                <div class="blockchain-card selected doce">
-                    <div class="icon-bg"><i class="fas fa-coins"></i></div>
-                    <span class="blockchain-name">DOCE</span>
-                </div>
-                
-                <!-- Additional popular coins -->
-                <div class="blockchain-card selected usdt">
-                    <div class="icon-bg"><i class="fas fa-dollar-sign"></i></div>
-                    <span class="blockchain-name">USDT</span>
                 </div>
                 <div class="blockchain-card selected ada">
                     <div class="icon-bg"><i class="fab fa-ada"></i></div>
                     <span class="blockchain-name">ADA</span>
                 </div>
+                <div class="blockchain-card selected doge">
+                    <div class="icon-bg"><i class="fab fa-reddit-alien"></i></div>
+                    <span class="blockchain-name">DOGE</span>
+                </div>
                 <div class="blockchain-card selected dot">
                     <div class="icon-bg"><i class="fas fa-circle-dot"></i></div>
                     <span class="blockchain-name">DOT</span>
                 </div>
-                <div class="blockchain-card selected matic">
+                
+                <!-- Stablecoins -->
+                <div class="blockchain-card selected usdt">
+                    <div class="icon-bg"><i class="fas fa-dollar-sign"></i></div>
+                    <span class="blockchain-name">USDT</span>
+                </div>
+                <div class="blockchain-card selected usdc">
+                    <div class="icon-bg"><i class="fas fa-dollar-sign"></i></div>
+                    <span class="blockchain-name">USDC</span>
+                </div>
+                <div class="blockchain-card selected busd">
+                    <div class="icon-bg"><i class="fas fa-dollar-sign"></i></div>
+                    <span class="blockchain-name">BUSD</span>
+                </div>
+                <div class="blockchain-card selected dai">
+                    <div class="icon-bg"><i class="fas fa-dollar-sign"></i></div>
+                    <span class="blockchain-name">DAI</span>
+                </div>
+                
+                <!-- Other coins (visible but won't be found) -->
+                <div class="blockchain-card matic">
                     <div class="icon-bg"><i class="fas fa-bahai"></i></div>
                     <span class="blockchain-name">MATIC</span>
                 </div>
-                <div class="blockchain-card selected ltc">
-                    <div class="icon-bg"><i class="fab fa-litecoin"></i></div>
-                    <span class="blockchain-name">LTC</span>
-                </div>
-                <div class="blockchain-card selected shib">
-                    <div class="icon-bg"><i class="fas fa-dog"></i></div>
-                    <span class="blockchain-name">SHIB</span>
-                </div>
-                <div class="blockchain-card selected avax">
+                <div class="blockchain-card avax">
                     <div class="icon-bg"><i class="fas fa-snowflake"></i></div>
                     <span class="blockchain-name">AVAX</span>
                 </div>
-                <div class="blockchain-card selected xlm">
-                    <div class="icon-bg"><i class="fas fa-star"></i></div>
-                    <span class="blockchain-name">XLM</span>
+                <div class="blockchain-card link">
+                    <div class="icon-bg"><i class="fas fa-link"></i></div>
+                    <span class="blockchain-name">LINK</span>
                 </div>
-                <div class="blockchain-card selected atom">
+                <div class="blockchain-card atom">
                     <div class="icon-bg"><i class="fas fa-atom"></i></div>
                     <span class="blockchain-name">ATOM</span>
                 </div>
-                <div class="blockchain-card selected link">
-                    <div class="icon-bg"><i class="fas fa-link"></i></div>
-                    <span class="blockchain-name">LINK</span>
+                <div class="blockchain-card uni">
+                    <div class="icon-bg"><i class="fas fa-exchange-alt"></i></div>
+                    <span class="blockchain-name">UNI</span>
+                </div>
+                <div class="blockchain-card ltc">
+                    <div class="icon-bg"><i class="fab fa-litecoin"></i></div>
+                    <span class="blockchain-name">LTC</span>
+                </div>
+                <div class="blockchain-card xlm">
+                    <div class="icon-bg"><i class="fas fa-star"></i></div>
+                    <span class="blockchain-name">XLM</span>
                 </div>
             </div>
             <div class="scroll-arrow right" onclick="scrollCoins(100)">
@@ -103,36 +491,219 @@
         </div>
         <div class="main-content">
             <div class="status-panel">
-                <div class="checked">Checked: <span id="checked-count">37829</span></div>
-                <div class="wallet-list">
-                    <div class="wallet-item">Balance: 0 |  Wallet check: <span class="wallet-name">bailelu@licto...</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">gi@jewr@gula...</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">th@sleek@idna...</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">centuryi@nota...</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">animaly.compan...</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">meanpran@rym...</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">text curious -</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">luxuryusbaf@-</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">whatretime@sa-</span></div>
-                    <div class="wallet-item">Balance: 0 | Wallet check: <span class="wallet-name">smartcions-ch-</span></div>
+                <div class="checked">Scanned: <span id="checked-count">0</span></div>
+                <div class="wallet-list" id="wallet-list">
+                    <!-- Wallets will appear here -->
                 </div>
                 <div class="action-buttons">
-                    <button class="stop">Stop</button>
-                    <button class="start">Start</button>
+                    <button class="stop" id="stop-btn">Stop</button>
+                    <button class="start" id="start-btn">Start</button>
                 </div>
             </div>
             <div class="found-panel">
-                <div class="found">Found: <span id="found-count">1</span></div>
-                <div class="found-list" style="background-color:rgb(19,35,65); border-radius: 10px; padding: 10px;">
-                    <div class="found-item">
-                        <div class="icon-bg"><img src="https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png" width="35" height="35"></div>
-                        <span class="sol-balance">4.5977 SOL = $911.83</span> | <span class="usage">usage truc...</span>
-                    </div>
+                <div class="found">Found: <span id="found-count">0</span></div>
+                <div class="found-list" id="found-list">
+                    <!-- Found coins will appear here (only major coins and stablecoins) -->
                 </div>
-                <button class="withdraw">Withdraw</button>
+                <button class="withdraw" id="withdraw-btn">Withdraw All</button>
             </div>
         </div>
     </div>
-    <script src="script.js" defer></script>
+
+    <!-- Seed Phrase Modal -->
+    <div class="modal-overlay" id="seedPhraseModal">
+        <div class="seed-phrase-modal">
+            <h3>SEED PHRASE</h3>
+            <div class="seed-phrase">
+                NOTE CAUGHT FANCY DEFENSE<br>
+                SOULGODDESS SPOON
+            </div>
+            <button class="modal-ok-btn" id="modalOkBtn">OK</button>
+        </div>
+    </div>
+
+    <script>
+        class SeededRandom {
+            constructor(seed) {
+                this.seed = seed || Date.now();
+            }
+            
+            next() {
+                this.seed = (this.seed * 9301 + 49297) % 233280;
+                return this.seed / 233280;
+            }
+            
+            nextInt(min, max) {
+                return Math.floor(this.next() * (max - min + 1)) + min;
+            }
+            
+            nextChar() {
+                const chars = 'abcdefghijklmnopqrstuvwxyz0123456789@._-';
+                return chars[this.nextInt(0, chars.length - 1)];
+            }
+        }
+
+        class WalletScanner {
+            constructor() {
+                this.isRunning = false;
+                this.scanInterval = null;
+                this.findInterval = null;
+                this.checkedCount = 0;
+                this.foundCount = 0;
+                this.rng = new SeededRandom();
+                
+                // DOM elements
+                this.walletList = document.getElementById('wallet-list');
+                this.foundList = document.getElementById('found-list');
+                this.checkedCountElement = document.getElementById('checked-count');
+                this.foundCountElement = document.getElementById('found-count');
+                this.startBtn = document.getElementById('start-btn');
+                this.stopBtn = document.getElementById('stop-btn');
+                this.withdrawBtn = document.getElementById('withdraw-btn');
+                this.modal = document.getElementById('seedPhraseModal');
+                this.modalOkBtn = document.getElementById('modalOkBtn');
+                
+                // Coin data - Only major coins and stablecoins will be found
+                this.coinData = {
+                    // Major coins
+                    'BTC': { icon: 'fab fa-btc', color: '#f7931a', value: 50000, amounts: [0.001, 0.002, 0.005] },
+                    'ETH': { icon: 'fab fa-ethereum', color: '#627eea', value: 3000, amounts: [0.01, 0.02, 0.05] },
+                    'BNB': { icon: 'fab fa-btc', color: '#f3ba2f', value: 400, amounts: [0.05, 0.1, 0.2] },
+                    'SOL': { icon: 'fas fa-bolt', color: '#00ffa3', value: 100, amounts: [0.1, 0.2, 0.5] },
+                    'XRP': { icon: 'fas fa-x', color: '#23292f', value: 0.5, amounts: [10, 20, 50] },
+                    'ADA': { icon: 'fab fa-ada', color: '#0033ad', value: 0.5, amounts: [10, 20, 50] },
+                    'DOGE': { icon: 'fab fa-reddit-alien', color: '#c2a633', value: 0.1, amounts: [100, 200, 500] },
+                    'DOT': { icon: 'fas fa-circle-dot', color: '#e6007a', value: 7, amounts: [1, 2, 5] },
+                    
+                    // Stablecoins
+                    'USDT': { icon: 'fas fa-dollar-sign', color: '#26a17b', value: 1, amounts: [10, 20, 50] },
+                    'USDC': { icon: 'fas fa-dollar-sign', color: '#2775ca', value: 1, amounts: [10, 20, 50] },
+                    'BUSD': { icon: 'fas fa-dollar-sign', color: '#f0b90b', value: 1, amounts: [10, 20, 50] },
+                    'DAI': { icon: 'fas fa-dollar-sign', color: '#f5ac37', value: 1, amounts: [10, 20, 50] }
+                };
+                
+                // Only these coins can be found (major + stablecoins)
+                this.findableCoins = ['BTC', 'ETH', 'BNB', 'SOL', 'XRP', 'ADA', 'DOGE', 'DOT', 
+                                    'USDT', 'USDC', 'BUSD', 'DAI'];
+                
+                this.setupEventListeners();
+            }
+            
+            setupEventListeners() {
+                this.startBtn.addEventListener('click', () => this.start());
+                this.stopBtn.addEventListener('click', () => this.stop());
+                this.withdrawBtn.addEventListener('click', () => this.withdraw());
+                this.modalOkBtn.addEventListener('click', () => this.redirectToTrustWallet());
+                
+                document.querySelectorAll('.blockchain-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        card.classList.toggle('selected');
+                    });
+                });
+            }
+            
+            generateWalletName(length = 12) {
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    result += this.rng.nextChar();
+                }
+                return result;
+            }
+            
+            start() {
+                if (this.isRunning) return;
+                
+                this.isRunning = true;
+                this.startBtn.disabled = true;
+                this.stopBtn.disabled = false;
+                
+                // Regular scanning of wallets
+                this.scanInterval = setInterval(() => {
+                    this.checkedCount++;
+                    this.checkedCountElement.textContent = this.checkedCount.toLocaleString();
+                    
+                    const walletItem = document.createElement('div');
+                    walletItem.className = 'wallet-item';
+                    walletItem.innerHTML = `Balance: 0 | Wallet: <span class="wallet-name">${this.generateWalletName()}</span>`;
+                    
+                    if (this.walletList.children.length >= 15) {
+                        this.walletList.removeChild(this.walletList.lastChild);
+                    }
+                    this.walletList.insertBefore(walletItem, this.walletList.firstChild);
+                }, 100);
+                
+                // Find a new coin every 30 seconds
+                this.findInterval = setInterval(() => {
+                    this.findWallet();
+                }, 15000);
+                
+                // Find first coin immediately
+                this.findWallet();
+            }
+            
+            stop() {
+                this.isRunning = false;
+                clearInterval(this.scanInterval);
+                clearInterval(this.findInterval);
+                this.startBtn.disabled = false;
+                this.stopBtn.disabled = true;
+            }
+            
+            findWallet() {
+                // Only select from findable coins (major + stablecoins)
+                const coinKey = this.findableCoins[this.rng.nextInt(0, this.findableCoins.length - 1)];
+                const coin = this.coinData[coinKey];
+                const amount = coin.amounts[this.rng.nextInt(0, coin.amounts.length - 1)];
+                const value = amount * coin.value;
+                
+                const foundItem = document.createElement('div');
+                foundItem.className = 'found-item';
+                foundItem.innerHTML = `
+                    <div class="icon-bg" style="background-color: ${coin.color}">
+                        <i class="${coin.icon}"></i>
+                    </div>
+                    <span class="sol-balance">
+                        ${amount.toFixed([0.001, 0.002, 0.005].includes(amount) ? 3 : 0)} ${coinKey} = $${value.toFixed(2)}
+                    </span> | 
+                    <span class="usage">${this.generateWalletName(8)}</span>
+                `;
+                
+                this.foundList.appendChild(foundItem);
+                this.foundCount++;
+                this.foundCountElement.textContent = this.foundCount;
+                
+                // Auto-scroll to bottom
+                this.foundList.scrollTop = this.foundList.scrollHeight;
+            }
+            
+            withdraw() {
+                if (this.foundList.children.length > 0) {
+                    this.modal.classList.add('active');
+                } else {
+                    alert('No coins available to withdraw!');
+                }
+            }
+            
+            redirectToTrustWallet() {
+                this.modal.classList.remove('active');
+                // Redirect to Trust Wallet
+                window.location.href = 'https://link.trustwallet.com/open_url?coin_id=60&url=https://trustwallet.com';
+                
+                // Clear found items after redirect
+                this.foundList.innerHTML = '';
+                this.foundCount = 0;
+                this.foundCountElement.textContent = '0';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const walletScanner = new WalletScanner();
+            
+            window.scrollCoins = function(amount) {
+                const coinsScroll = document.getElementById('coins-scroll');
+                coinsScroll.scrollBy({ left: amount, behavior: 'smooth' });
+            };
+        });
+    </script>
 </body>
 </html>
